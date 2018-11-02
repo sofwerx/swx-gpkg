@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"github.com/edwardfward/swx-gpkg/gpkg"
 	"github.com/mattn/go-sqlite3"
 	"log"
@@ -29,7 +30,12 @@ func main() {
 
 	gpsdata := gpkg.GPSData{}
 
-	gpsdata.ExtractObsPointsAndSat(db)
+	c, err := gpsdata.ExportToCSV(db)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("Parsed %d records", c)
 
 	defer db.Close()
 

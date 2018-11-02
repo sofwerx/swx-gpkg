@@ -6,123 +6,139 @@ import (
 	"time"
 )
 
-// observation contains gps observations and satellite data
+type Observation struct {
+	id                  int32
+	systime             time.Time
+	lat                 float64
+	lon                 float64
+	alt                 float64
+	provider            string
+	gpsTime             int64
+	fixsatcount         int8
+	hasradialaccruacy   bool
+	hasverticalaccuracy bool
+	radialaccuracy      float64
+	verticalaccuracy    float64
+	obsdatadump         string
+	speed               float64
+	speedAccuracy       float64
+	satId               int32
+	satLocalTime        int64
+	satSvid             int8
+	satConstellation    string
+	satCn0              float64
+	satAgc              float64
+	satHasAgc           bool
+	satInFix            bool
+	satTimeNanos        float64
+	satTime1SigmaNanos  float64
+	satHasCarrier       bool
+	satPseudoRateMps    float64
+	satPseudoRate1Sigma float64
+	satHasEphemeris     bool
+	satAzimuth          float64
+	satElevation        float64
+	satDataDump         string
+}
 
 type GPSData struct {
-	sqlfile    string
-	gpsSatData [][]int32
-	data       []*GPSObservation
-	gpsobs     []GPSObservation
-	satobs     []SatObs
+	sqlfile string
 }
 
-type GPSObservation struct {
-	id                  uint32    `json:"id, omitempty"`
-	systime             time.Time `json:"systime_nanos, omitempty"`
-	lat                 float64   `json:"latitude, omitempty"`
-	lon                 float64   `json:"longitude, omitempty"`
-	alt                 float64   `json:"altitude_ft, omitempty"`
-	provider            string    `json:"provider, omitempty"`
-	gpsTime             uint64    `json:"gps_time, omitempty"`
-	fixedSatCount       int8      `json:"sat_count, omitempty"`
-	satobs              []*SatObs `json:"sats, omitempty"`
-	hasRadialAccuracy   bool      `json:"has_radial_accuracy, omitempty"`
-	hasVerticalAccuracy bool      `json:"has_vertical_accuracy, omitempty"`
-	radialAccuracy      float64   `json:"radial_accuracy, omitempty"`
-	verticalAccuracy    float64   `json:"vertical_accuracy, omitempty"`
-	dataDump            string    `json:"data_dump, omitempty"`
-	speed               float64   `json:"speed, omitempty"`
-	speedAccuracy       float64   `json:"speed_accuracy, omitempty"`
-}
+func (g *GPSData) ExportToCSV(db *sql.DB) (int, error) {
+	qrystr := `
+	SELECT P.id,
+       P.SysTime,
+       P.Lat,
+       P.Lon,
+       P.Alt,
+       P.Provider,
+       P.GPSTime,
+       P.FixSatCount,
+       P.HasRadialAccuracy,
+       P.HasVerticalAccuracy,
+       P.RadialAccuracy,
+       P.VerticalAccuracy,
+       P.data_dump,
+       P.Speed,
+       P.SpeedAccuracy,
+       S.id as sat_id,
+       S.local_time as sat_local_time,
+       S.svid as sat_svid,
+       S.constellation as sat_constellation,
+       S.cn0 as sat_cn0,
+       S.agc as sat_agc,
+       S.has_agc as sat_has_agc,
+       S.in_fix as sat_in_fix,
+       S.sat_time_nanos,
+       S.sat_time_1sigma_nanos,
+       S.has_carrier_freq as sat_has_carrier_freq,
+       S.pseudorange_rate_mps,
+       S.pseudorange_rate_1sigma,
+       S.has_ephemeris as sat_has_ephemeris,
+       S.azimuth_deg as sat_azimuth_deg,
+       S.elevation_deg as sat_elevation_deg,
+       S.data_dump as sat_data_dump
+	FROM gps_observation_points_sat_data AS G
+       	 LEFT JOIN
+     	 gps_observation_points AS P
+     	 ON G.base_id = P.id
+         LEFT JOIN
+         sat_data as S
+         ON G.related_id = S.id
+	ORDER BY G.base_id`
 
-type SatObs struct {
-	id                    uint32  `json:"id, omitempty"`
-	localtime             int64   `json:"local_time_nanos, omitempty"`
-	svid                  uint8   `json:"satellite_id, omitempty"`
-	constellation         string  `json:"constellation, omitempty"`
-	cn0                   float32 `json:"cn0, omitempty"`
-	agc                   float32 `json:"automatic_gain_control, omitempty"`
-	hasAgc                bool    `json:"has_agc, omitempty"`
-	infix                 bool    `json:"in_fix, omitempty"`
-	satTimeNanos          float64 `json:"satellite_time_nanos, omitempty"`
-	satTime1signmaNanos   float64 `json:"satellite_sigma_nanos, omitempty"`
-	hasCarrierFreq        bool    `json:"has_carrier_freq, omitempty"`
-	psuedorangeRateMps    float64 `json:"psuedo_range_rate_mps, omitempty"`
-	psuedorangeRate1Sigma float64 `json:"psuedo_range_rate_sigma, omitempty"`
-	hasEphemeris          bool    `json:"has_ephemeris, omitempty"`
-	azimuthDeg            int32   `json:"azimuth_deg, omitempty"`
-	elevationDeg          int32   `json:"elevation_deg, omitempty"`
-	dataDump              string  `json:"data_dump, omitempty"`
-}
+	results, err := db.Query(qrystr)
+	if err != nil {
+		log.Printf("%q: %s", err, qrystr)
+	}
 
-func (g *GPSData) ExportToCSV() (int64, error) {
-	return 0, nil
+	count := 1
+
+	for results.Next() {
+		var obs = Observation{}
+		if err := results.Scan(
+			&obs.id,
+			&obs.systime,
+			&obs.lat,
+			&obs.lon,
+			&obs.alt,
+			&obs.provider,
+			&obs.gpsTime,
+			&obs.fixsatcount,
+			&obs.hasradialaccruacy,
+			&obs.hasverticalaccuracy,
+			&obs.radialaccuracy,
+			&obs.verticalaccuracy,
+			&obs.obsdatadump,
+			&obs.speed,
+			&obs.speedAccuracy,
+			&obs.satId,
+			&obs.satLocalTime,
+			&obs.satSvid,
+			&obs.satConstellation,
+			&obs.satCn0,
+			&obs.satAgc,
+			&obs.satHasAgc,
+			&obs.satInFix,
+			&obs.satTimeNanos,
+			&obs.satTime1SigmaNanos,
+			&obs.satHasCarrier,
+			&obs.satPseudoRateMps,
+			&obs.satPseudoRate1Sigma,
+			&obs.satHasEphemeris,
+			&obs.satAzimuth,
+			&obs.satElevation,
+			&obs.satDataDump); err != nil {
+			log.Fatal(err)
+		}
+		count++
+	}
+
+	return count, nil
 }
 
 func (g *GPSData) ExtractObsPointsAndSat(db *sql.DB) error {
-
-	// get gps observation points and sat data pairings
-	qryStmt := `SELECT base_id, related_id FROM gps_observation_points_sat_data`
-
-	results, err := db.Query(qryStmt)
-	if err != nil {
-		log.Printf("%q: %s\n", err, qryStmt)
-		return err
-	}
-
-	data := []int32{0, 0}
-	// extract the base and related ids for gps observations and sat data
-	for results.Next() {
-		var baseid, relatedid int32
-		if err := results.Scan(&baseid, &relatedid); err != nil {
-			log.Fatal(err)
-		}
-
-		data[0] = baseid
-		data[1] = relatedid
-		g.gpsSatData = append(g.gpsSatData, data)
-	}
-
-	// get satellite observation data
-	qryStmt = `SELECT id, local_time, svid, constellation,
-       cn0, agc, has_agc, in_fix, sat_time_nanos,
-       sat_time_1sigma_nanos, has_carrier_freq,
-       pseudorange_rate_mps, pseudorange_rate_1sigma,
-       has_ephemeris, azimuth_deg, elevation_deg,
-       data_dump
-	   FROM sat_data`
-
-	results, err = db.Query(qryStmt)
-	if err != nil {
-		log.Printf("%q: %s\n", err, qryStmt)
-		return err
-	}
-
-	for results.Next() {
-		var sat SatObs
-		if err := results.Scan(
-			&sat.id,
-			&sat.localtime,
-			&sat.svid,
-			&sat.constellation,
-			&sat.cn0,
-			&sat.agc,
-			&sat.hasAgc,
-			&sat.infix,
-			&sat.satTimeNanos,
-			&sat.satTime1signmaNanos,
-			&sat.hasCarrierFreq,
-			&sat.psuedorangeRateMps,
-			&sat.psuedorangeRate1Sigma,
-			&sat.hasEphemeris,
-			&sat.azimuthDeg,
-			&sat.elevationDeg,
-			&sat.dataDump); err != nil {
-			log.Fatal(err)
-		}
-
-		g.satobs = append(g.satobs, sat)
-	}
 
 	return nil
 }
