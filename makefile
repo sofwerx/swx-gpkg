@@ -9,7 +9,7 @@ GOGET=$(GOCMD) get
 BINARY_NAME=swxtorgi
 
 # run these subcommands using make
-all: test build
+all: install test build
 
 # builds go cmd line binary and outputs it to ~/go/bin/[filename]
 # build location must be present in user path
@@ -32,3 +32,4 @@ clean:
 # go get
 install:
 	$(GOGET) github.com/edwardfward/swx-gpkg
+	$(GOGET) github.com/mattn/go-sqlite3
