@@ -1,6 +1,7 @@
 package gpkg
 
 import (
+	"fmt"
 	"reflect"
 	"time"
 )
@@ -49,6 +50,19 @@ func (o *Observation) getInterfacePtrs() []interface{} {
 	}
 
 	return values
+}
+
+func (o *Observation) String() []string {
+	var s []string
+	v := reflect.Indirect(reflect.ValueOf(o))
+	s = make([]string, v.NumField())
+
+	for i := 0; i < v.NumField(); i++ {
+		value := v.Field(i).Interface()
+		s[i] = fmt.Sprintf("%v", value)
+	}
+
+	return s
 }
 
 func (o *Observation) getSQLQuery() string {
