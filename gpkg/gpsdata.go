@@ -20,8 +20,7 @@ func (g *GPSData) ExportToCSV(db *sql.DB, d GeoData) (int, error) {
 	count := 0
 
 	for results.Next() {
-		var obs = Observation{}
-		if err := results.Scan(obs.ObsInterfaces()...); err != nil {
+		if err := results.Scan(d.getInterfacePtrs()...); err != nil {
 			log.Fatal(err)
 		}
 		count++
