@@ -28,9 +28,3 @@ func (g *GPSData) ExportToCSV(db *sql.DB, d GeoData) (int, error) {
 
 	return count, nil
 }
-
-func (g *GPSData) ExtractObsPointsAndSat(db *sql.DB) error {
-
-	return nil
-}
-
