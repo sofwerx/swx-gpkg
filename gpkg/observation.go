@@ -40,7 +40,7 @@ type Observation struct {
 	SatDataDump         string
 }
 
-func (o *Observation) ObsInterfaces() []interface{} {
+func (o *Observation) getInterfacePtrs() []interface{} {
 
 	v := reflect.Indirect(reflect.ValueOf(o))
 	values := make([]interface{}, v.NumField())
