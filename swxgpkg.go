@@ -21,7 +21,6 @@ func main() {
 	})
 
 	gpkgfilename := os.Args[1]
-	// todo add file and permissions checking
 
 	db, err := sql.Open("sqlite3_test", gpkgfilename)
 	if err != nil {
@@ -29,8 +28,9 @@ func main() {
 	}
 
 	gpsdata := gpkg.GPSData{}
+	schema := gpkg.Observation{}
 
-	c, err := gpsdata.ExportToCSV(db)
+	c, err := gpsdata.ExportToCSV(db, &schema)
 	if err != nil {
 		log.Fatal(err)
 	}
