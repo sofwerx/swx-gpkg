@@ -2,7 +2,6 @@ package gpkg
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"reflect"
 )
@@ -19,15 +18,15 @@ func (g *GPSData) ExportToCSV(db *sql.DB, d GeoData) (int, error) {
 		log.Printf("%q: %s", err, qrystr)
 	}
 
-	count := 0
+	dType := reflect.New(reflect.TypeOf(d).Elem()).Interface().(GeoData)
+	var row []GeoData
 
 	for results.Next() {
-		dType := reflect.New(reflect.TypeOf(d).Elem()).Interface().(GeoData)
 		if err := results.Scan(dType.getInterfacePtrs()...); err != nil {
 			log.Fatal(err)
 		}
-		fmt.Println(dType)
+		row = append(row, dType)
 	}
 
-	return count, nil
+	return len(row), nil
 }
