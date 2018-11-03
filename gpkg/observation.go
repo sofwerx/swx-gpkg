@@ -18,7 +18,7 @@ type Observation struct {
 	Hasverticalaccuracy bool
 	Radialaccuracy      float64
 	Verticalaccuracy    float64
-	Obsdatadump         string
+	// Obsdatadump         string
 	Speed               float64
 	SpeedAccuracy       float64
 	SatId               int32
@@ -37,7 +37,7 @@ type Observation struct {
 	SatHasEphemeris     bool
 	SatAzimuth          float64
 	SatElevation        float64
-	SatDataDump         string
+	// SatDataDump         string
 }
 
 func (o *Observation) getInterfacePtrs() []interface{} {
@@ -65,7 +65,6 @@ func (o *Observation) getSQLQuery() string {
 				P.HasVerticalAccuracy,                                              
 				P.RadialAccuracy,                                                   
 				P.VerticalAccuracy,                                                 
-				P.data_dump,                                                        
 				P.Speed,                                                            
 				P.SpeedAccuracy,                                                    
 				S.id as sat_id,                                                     
@@ -83,8 +82,7 @@ func (o *Observation) getSQLQuery() string {
 				S.pseudorange_rate_1sigma,                                          
 				S.has_ephemeris as sat_has_ephemeris,                               
 				S.azimuth_deg as sat_azimuth_deg,                                   
-				S.elevation_deg as sat_elevation_deg,                               
-				S.data_dump as sat_data_dump                                        
+				S.elevation_deg as sat_elevation_deg                               
            	FROM gps_observation_points_sat_data AS G                              
 			LEFT JOIN                                                         
 			gps_observation_points AS P                                       
