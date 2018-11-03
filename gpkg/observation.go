@@ -54,44 +54,44 @@ func (o *Observation) getInterfacePtrs() []interface{} {
 func (o *Observation) getSQLQuery() string {
 	return `
 			SELECT P.id,                                                           
-                 P.SysTime,                                                          
-                  P.Lat,                                                              
-                  P.Lon,                                                              
-                  P.Alt,                                                              
-                  P.Provider,                                                         
-                  P.GPSTime,                                                          
-                  P.FixSatCount,                                                      
-                  P.HasRadialAccuracy,                                                
-                  P.HasVerticalAccuracy,                                              
-                  P.RadialAccuracy,                                                   
-                  P.VerticalAccuracy,                                                 
-                  P.data_dump,                                                        
-                  P.Speed,                                                            
-                  P.SpeedAccuracy,                                                    
-                  S.id as sat_id,                                                     
-                  S.local_time as sat_local_time,                                     
-                  S.svid as sat_svid,                                                 
-                  S.constellation as sat_constellation,                               
-                  S.cn0 as sat_cn0,                                                   
-                  S.agc as sat_agc,                                                   
-                  S.has_agc as sat_has_agc,                                           
-                  S.in_fix as sat_in_fix,                                             
-                  S.sat_time_nanos,                                                   
-                  S.sat_time_1sigma_nanos,                                            
-                  S.has_carrier_freq as sat_has_carrier_freq,                         
-                  S.pseudorange_rate_mps,                                             
-                  S.pseudorange_rate_1sigma,                                          
-                  S.has_ephemeris as sat_has_ephemeris,                               
-                  S.azimuth_deg as sat_azimuth_deg,                                   
-                  S.elevation_deg as sat_elevation_deg,                               
-                  S.data_dump as sat_data_dump                                        
+				P.SysTime,                                                          
+				P.Lat,                                                              
+				P.Lon,                                                              
+				P.Alt,                                                              
+				P.Provider,
+				P.GPSTime,                                                          
+				P.FixSatCount,                                                      
+				P.HasRadialAccuracy,                                                
+				P.HasVerticalAccuracy,                                              
+				P.RadialAccuracy,                                                   
+				P.VerticalAccuracy,                                                 
+				P.data_dump,                                                        
+				P.Speed,                                                            
+				P.SpeedAccuracy,                                                    
+				S.id as sat_id,                                                     
+				S.local_time as sat_local_time,                                     
+				S.svid as sat_svid,                                                 
+				S.constellation as sat_constellation,                               
+				S.cn0 as sat_cn0,                                                   
+				S.agc as sat_agc,                                                   
+				S.has_agc as sat_has_agc,                                           
+				S.in_fix as sat_in_fix,                                             
+				S.sat_time_nanos,                                                   
+				S.sat_time_1sigma_nanos,                                            
+				S.has_carrier_freq as sat_has_carrier_freq,                         
+				S.pseudorange_rate_mps,                                             
+				S.pseudorange_rate_1sigma,                                          
+				S.has_ephemeris as sat_has_ephemeris,                               
+				S.azimuth_deg as sat_azimuth_deg,                                   
+				S.elevation_deg as sat_elevation_deg,                               
+				S.data_dump as sat_data_dump                                        
            	FROM gps_observation_points_sat_data AS G                              
-                  	 LEFT JOIN                                                         
-                	 gps_observation_points AS P                                       
-                	 ON G.base_id = P.id                                               
-                    LEFT JOIN                                                         
-                    sat_data as S                                                     
-                    ON G.related_id = S.id                                            
+			LEFT JOIN                                                         
+			gps_observation_points AS P                                       
+			ON G.base_id = P.id                                               
+			LEFT JOIN                                                         
+			sat_data as S                                                     
+			ON G.related_id = S.id                                            
            	ORDER BY G.base_id
 			`
 }
