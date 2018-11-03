@@ -2,7 +2,9 @@ package gpkg
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
+	"reflect"
 )
 
 type GPSData struct {
@@ -20,10 +22,11 @@ func (g *GPSData) ExportToCSV(db *sql.DB, d GeoData) (int, error) {
 	count := 0
 
 	for results.Next() {
-		if err := results.Scan(d.getInterfacePtrs()...); err != nil {
+		dType := reflect.New(reflect.TypeOf(d).Elem()).Interface().(GeoData)
+		if err := results.Scan(dType.getInterfacePtrs()...); err != nil {
 			log.Fatal(err)
 		}
-		count++
+		fmt.Println(dType)
 	}
 
 	return count, nil
