@@ -11,11 +11,8 @@ import (
 
 func main() {
 
-	var sqlite3conn *sqlite3.SQLiteConn
-
 	sql.Register("sqlite3_test", &sqlite3.SQLiteDriver{
 		ConnectHook: func(conn *sqlite3.SQLiteConn) error {
-			sqlite3conn = conn
 			return nil
 		},
 	})
