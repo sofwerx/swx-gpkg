@@ -3,4 +3,9 @@
 ```bash
 $ swxtorgi filename
 ```
-Outputs CSV
+- [X] Output CSV
+- [ ] Output JSON
+- [ ] Add Command line flags
+- [ ] Create Go docs
+- [ ] Configure makefile for Docker builds
+- [ ] Add 100% test coverage
