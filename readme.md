@@ -1,4 +1,4 @@
-###SWX-GPKG
+##SWX-GPKG Command line tool
 
 ```bash
 $ swxtorgi filename
