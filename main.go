@@ -11,23 +11,30 @@ import (
 
 func main() {
 
-	sql.Register("sqlite3_test", &sqlite3.SQLiteDriver{
+	sql.Register("geoSql", &sqlite3.SQLiteDriver{
 		ConnectHook: func(conn *sqlite3.SQLiteConn) error {
 			return nil
 		},
 	})
 
-	gpkgfilename := os.Args[1]
+	// check command line argument count
+	if len(os.Args) < 2 {
+		fmt.Printf("command requires sqllite filename.gpkg to " +
+			"convert...exiting\n")
+		os.Exit(1)
+	}
 
-	db, err := sql.Open("sqlite3_test", gpkgfilename)
+	sqlFile := os.Args[1]
+
+	db, err := sql.Open("geoSql", sqlFile)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	gpsdata := gpkg.GPSData{}
+	gpsData := gpkg.GPSData{}
 	schema := gpkg.Observation{}
 
-	c, err := gpsdata.ExportToCSV(db, &schema)
+	c, err := gpsData.ExportToCSV(db, &schema)
 	if err != nil {
 		log.Fatal(err)
 	}
