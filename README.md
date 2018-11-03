@@ -1,7 +1,7 @@
 ### SWX-GPKG Command line tool
 
 ```bash
-$ swxtorgi filename
+swxtorgi filename
 ```
 - [X] Output CSV
 - [ ] Output JSON
