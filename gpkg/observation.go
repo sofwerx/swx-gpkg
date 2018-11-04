@@ -1,44 +1,44 @@
 package gpkg
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
 	"reflect"
 	"time"
 )
 
 type Observation struct {
-	Id                  int32
-	Systime             time.Time
-	Lat                 float64
-	Lon                 float64
-	Alt                 float64
-	Provider            string
-	GpsTime             int64
-	Fixsatcount         int8
-	Hasradialaccruacy   bool
-	Hasverticalaccuracy bool
-	Radialaccuracy      float64
-	Verticalaccuracy    float64
-	// Obsdatadump         string
-	Speed               float64
-	SpeedAccuracy       float64
-	SatId               int32
-	SatLocalTime        int64
-	SatSvid             int8
-	SatConstellation    string
-	SatCn0              float64
-	SatAgc              float64
-	SatHasAgc           bool
-	SatInFix            bool
-	SatTimeNanos        float64
-	SatTime1SigmaNanos  float64
-	SatHasCarrier       bool
-	SatPseudoRateMps    float64
-	SatPseudoRate1Sigma float64
-	SatHasEphemeris     bool
-	SatAzimuth          float64
-	SatElevation        float64
-	// SatDataDump         string
+	Id                  int32     `json:"id"`
+	SysTime             time.Time `json:"systime"`
+	Lat                 float64   `json:"lat"`
+	Lon                 float64   `json:"lon"`
+	Alt                 float64   `json:"alt"`
+	Provider            string    `json:"provider"`
+	GpsTime             int64     `json:"gps_time"`
+	FixSatCount         int8      `json:"fixsatcount"`
+	HasRadialAccuracy   bool      `json:"hasradialaccruacy"`
+	HasVerticalAccuracy bool      `json:"hasverticalaccuracy"`
+	RadialAccuracy      float64   `json:"radialaccuracy"`
+	VerticalAccuracy    float64   `json:"verticalaccuracy"`
+	Speed               float64   `json:"speed"`
+	SpeedAccuracy       float64   `json:"speed_accuracy"`
+	SatId               int32     `json:"sat_id"`
+	SatLocalTime        int64     `json:"sat_local_time"`
+	SatVehicleId        int8      `json:"sat_svid"`
+	SatConstellation    string    `json:"sat_constellation"`
+	SatCn0              float64   `json:"sat_cn_0"`
+	SatAgc              float64   `json:"sat_agc"`
+	SatHasAgc           bool      `json:"sat_has_agc"`
+	SatInFix            bool      `json:"sat_in_fix"`
+	SatTimeNanos        float64   `json:"sat_time_nanos"`
+	SatTime1SigmaNanos  float64   `json:"sat_time_1_sigma_nanos"`
+	SatHasCarrier       bool      `json:"sat_has_carrier"`
+	SatPseudoRateMps    float64   `json:"sat_pseudo_rate_mps"`
+	SatPseudoRate1Sigma float64   `json:"sat_pseudo_rate_1_sigma"`
+	SatHasEphemeris     bool      `json:"sat_has_ephemeris"`
+	SatAzimuth          float64   `json:"sat_azimuth"`
+	SatElevation        float64   `json:"sat_elevation"`
 }
 
 func (o *Observation) getInterfacePtrs() []interface{} {
@@ -50,6 +50,15 @@ func (o *Observation) getInterfacePtrs() []interface{} {
 	}
 
 	return values
+}
+
+func (o *Observation) Json() []byte {
+	j, err := json.Marshal(o)
+	if err != nil {
+		log.Fatal("could not marshal json")
+	}
+
+	return j
 }
 
 func (o *Observation) String() []string {
