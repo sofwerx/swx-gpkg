@@ -28,7 +28,7 @@ func main() {
 
 	db, err := sql.Open("geoSql", sqlFile)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("error: could not open %s", sqlFile)
 	}
 
 	gpsData := gpkg.GPSData{}
