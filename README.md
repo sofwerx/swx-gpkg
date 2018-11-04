@@ -1,3 +1,4 @@
+![alt text](https://travis-ci.org/edwardfward/swx-gpkg.svg?branch=master)
 ### SWX-GPKG Command line tool
 
 ```bash
