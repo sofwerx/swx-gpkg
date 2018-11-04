@@ -1,17 +1,17 @@
 language: go
-
 env:
-  - GO111Module=on
-
+- GO111Module=on
 go:
-  - "1.11.x"
-
+- 1.11.x
 git:
   depth: 1
-
-#safelist
 branches:
   only:
-    - master
-
+  - master
 install: true
+notifications:
+  slack:
+    rooms:
+      secure: qNpEmzR3UfH6yZ0VpVXYtOTPYwQRmZreMvj9RuE4GON7LUs1/x4J0vi//aBTi3h45g4jEaiUcRw5J92b7Ce0J46ydf5/fxE6UyTP5/uixWtjkh41IlsinIITpcdmF++jZR560Nbah7k/k1Z7SBjhYOYWc3fhVtIqSOxBIy/FTQKfMgLcctV1EJGw0b22NHDDcRA4WIP+U3TH58y9u7xe7gz++EjcKxX1CuS4Ha/pJI1SqoERvV2WwfWRi8bGoQLCC0xpow0q83Bzah2taXVCcdLcohkE8Uwz+vvNWbYqBqMthBdfFduzo62dV95Ajjv89OHv2vzRPWnBfPIgE1Tx2VlGlTrW16fXU5Z1LdocnwsXKU7ocmODNjGX6y0Idp6fRGYt4Esc8eb0BYz1VS0GSSU3EzU0uSlxP1Q0/YLSl4musC3WW8XJa/UlzD+wAAoORA15BZr8RC2ByunVQ443PbtkXrHqcxTQBwT4s1wwNM4UBbrlzYWYMim7csba3xi2QrKgFla7omQYV8aSVNdDBo9ZlHNGFCmtX6EfSgioXFjQIAduC+NQK3wYTiwDw5WR3/NNIIFdyiTWEvakFIqlomDBQ62sH1mC9BHPv3YfSm5xiyDfE+QOpMLd4r1ZiThMbnNGlmLmfRRWICMA3db5q2JZIGzcBTaRcHdR9vonujM=
+    on_success: always
+    on_failure: always
