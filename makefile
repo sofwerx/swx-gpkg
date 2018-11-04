@@ -1,6 +1,5 @@
 # Go parameters
 GOCMD=go
-GOBIN=$(GOBIN)
 GOBUILD=$(GOCMD) build
 GOCLEAN=$(GOCMD) clean
 GOFMT=$(GOCMD) fmt
