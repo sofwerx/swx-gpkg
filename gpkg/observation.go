@@ -10,22 +10,22 @@ import (
 
 type Observation struct {
 	Id                  int32     `json:"id"`
-	SysTime             time.Time `json:"systime"`
+	SysTime             time.Time `json:"sys_time"`
 	Lat                 float64   `json:"lat"`
 	Lon                 float64   `json:"lon"`
 	Alt                 float64   `json:"alt"`
 	Provider            string    `json:"provider"`
 	GpsTime             int64     `json:"gps_time"`
-	FixSatCount         int8      `json:"fixsatcount"`
-	HasRadialAccuracy   bool      `json:"hasradialaccruacy"`
-	HasVerticalAccuracy bool      `json:"hasverticalaccuracy"`
-	RadialAccuracy      float64   `json:"radialaccuracy"`
-	VerticalAccuracy    float64   `json:"verticalaccuracy"`
+	FixSatCount         int8      `json:"fix_sat_count"`
+	HasRadialAccuracy   bool      `json:"has_radial_accuracy"`
+	HasVerticalAccuracy bool      `json:"has_vertical_accuracy"`
+	RadialAccuracy      float64   `json:"radial_accuracy"`
+	VerticalAccuracy    float64   `json:"vertical_accuracy"`
 	Speed               float64   `json:"speed"`
 	SpeedAccuracy       float64   `json:"speed_accuracy"`
 	SatId               int32     `json:"sat_id"`
 	SatLocalTime        int64     `json:"sat_local_time"`
-	SatVehicleId        int8      `json:"sat_svid"`
+	SatVehicleId        int8      `json:"sat_vehicle_id"`
 	SatConstellation    string    `json:"sat_constellation"`
 	SatCn0              float64   `json:"sat_cn_0"`
 	SatAgc              float64   `json:"sat_agc"`
